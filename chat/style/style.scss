@@ -1,0 +1,163 @@
+@font-face {
+  font-family: 'Bellota';
+  src: url('../assets/fonts/BellotaText-Regular.ttf');
+  src: url('../assets/fonts/BellotaText-Regular.eot') format('embedded-opentype'),
+      url('../assets/fonts/BellotaText-Regular.woff2') format('woff2'),
+      url('../assets/fonts/BellotaText-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$bg-color: rgb(25, 53, 79);
+$text-color:  rgb(201, 232, 242);
+$text-color-bright:  rgb(87, 206, 246);
+$padding: 2rem;
+$transition: all ease 0.5s;
+
+@mixin flex-column($gap) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+@mixin flex-row($gap) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $gap;
+}
+
+body {
+  background-color: $bg-color;
+  font: normal normal 16px/20px Bellota, sans-serif;
+  color: $text-color;
+}
+
+.chat {
+  margin: 0 auto;
+  background-color: $bg-color;
+  padding: $padding;
+
+  &__title {
+    padding-bottom: $padding * 1.2;
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: $padding;
+  }
+}
+
+.inputs {
+  @include flex-column($padding);
+
+  &__title {
+    color: $text-color-bright;
+  }
+
+  &__radio-name-container {
+    @include flex-row($padding * 0.75);
+    justify-content: flex-start;
+
+    .radio-custom {
+      position: relative;
+      z-index: -1;
+      opacity: 0;
+    }
+
+    .radio-label {
+      @include flex-row(0px);
+    }
+
+    .radio-label::after {
+      content: '';
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-left: $padding * 0.25;
+      position: relative;
+      border: 3px dashed $text-color-bright;
+      cursor: pointer;
+    }
+
+    .radio-custom:checked + .radio-label::after {
+      border: 3px solid $text-color-bright;
+      background-color: $text-color-bright;
+    }
+  }
+
+  &__name-container,
+  &__avatar-container,
+  &__comment-container {
+    @include flex-column($padding * 0.5);
+  }
+
+  &__name-input,
+  &__avatar-input,
+  &__comment-input {
+    outline: none;
+    background-color: transparent;
+    padding: $padding * 0.25;
+    border: 1px dashed $text-color-bright;
+
+    &:active,
+    &:focus {
+      border: 1px solid $text-color-bright;
+    }
+  }
+
+  &__comment-input {
+    resize: none;
+    height: 8rem;
+  }
+
+  &__button {
+    outline: none;
+    border: 1px solid $text-color-bright;
+    background-color: $text-color-bright;
+    padding: $padding * 0.25;
+    cursor: pointer;
+    color: $bg-color;
+    transition: $transition;
+
+    &:active {
+      border: 1px solid $text-color-bright;
+      background-color: $bg-color;
+      color: $text-color;
+      transform: scale(0.95);
+    }
+  }
+}
+
+.display {
+  @include flex-column($padding);
+
+  &__title {
+    color: $text-color-bright;
+  }
+
+  .comment {
+    @include flex-column($padding * 0.5);
+    padding-top: $padding * 0.5;
+    padding-bottom: $padding * 0.5;
+    border-bottom: 1px dashed $text-color-bright;
+
+    &__header {
+     @include flex-row(unset);
+    }
+
+    &__avatar-container {
+      @include flex-row($padding * 0.5);
+    }
+
+    &__avatar {
+      width: 4rem;
+      height: auto;
+    }
+  }
+}
+
+.bold {
+  font-weight: bolder;
+}

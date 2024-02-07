@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Chat Service</title>
+		<link rel="stylesheet" href="style/normalize.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="shortcut icon" href="assets/img/favico.svg" type="image/svg">
+	</head>
+	<body>
+    <section class="chat">
+      <h1 class="chat__title">Сервис комментариев во спам фильтром</h1>
+      <div class="chat__container">
+        <div class="inputs">
+          <h3 class="inputs__title">Оставьте ваш комментарий</h3>
+
+          <div class="inputs__radio-name-container">
+            <p class="nputs__radio-name-title">Показывать Ваше имя?</p>
+            <input class="radio-custom" type="radio" id="yes" name="radio-name" checked><label class="radio-label" for="yes">Да</label>
+            <input class="radio-custom" type="radio" id="no" name="radio-name"><label class="radio-label" for="no">Нет</label>
+          </div>
+
+          <div class="inputs__name-container">
+            <label for="name">Введите ваше <span class="bold">Имя:</span></label>
+            <input class="inputs__name-input" type="text" id="name">
+          </div>
+
+          <div class="inputs__avatar-container">
+            <label for="avatar">Введите ссылку <span class="bold">Вашего аватара:</span></label>
+            <input class="inputs__avatar-input" type="url" id="avatar">
+          </div>
+
+          <div class="inputs__comment-container">
+            <label for="comment">Оставьте комментарий:</label>
+            <textarea class="inputs__comment-input" name="comment" id="comment"></textarea>
+          </div>
+
+          <button class="inputs__button" type="button"><span class="bold">Отправить</span></button>
+
+        </div>
+
+        <div class="display">
+          <h3 class="display__title">Чат</h3>
+
+          <div class="comment">
+            <div class="comment__header">
+              <div class="comment__avatar-container">
+                <img class="comment__avatar" src="assets/img/ava-1.png" alt="аватар">
+                <h4 class="comment__name">Username</h4>
+              </div>
+
+              <div class="comment__date">Date</div>
+            </div>
+
+            <div class="comment__body">Some comment by user</div>
+          </div>
+
+          <div class="comment">
+            <div class="comment__header">
+              <div class="comment__avatar-container">
+                <img class="comment__avatar" src="assets/img/ava-1.png" alt="аватар">
+                <h4 class="comment__name">Username</h4>
+              </div>
+
+              <div class="comment__date">Date</div>
+            </div>
+
+            <div class="comment__body">Some comment by user</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+		<script src="script.js"></script>
+	</body>
+</html>
