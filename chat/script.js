@@ -3,13 +3,13 @@ const button = document.querySelector('.inputs__button');
 const chat = document.querySelector('.display');
 
 const avatarArr = [
-  [0, 'assets/img/avatars/ava-0.png'],
-  [1, 'assets/img/avatars/ava-1.png'],
-  [2, 'assets/img/avatars/ava-2.png'],
-  [3, 'assets/img/avatars/ava-3.png'],
-  [4, 'assets/img/avatars/ava-4.png'],
-  [5, 'assets/img/avatars/ava-5.png'],
-  [6, 'assets/img/avatars/ava-6.png'],
+  'assets/img/avatars/ava-0.png',
+  'assets/img/avatars/ava-1.png',
+  'assets/img/avatars/ava-2.png',
+  'assets/img/avatars/ava-3.png',
+  'assets/img/avatars/ava-4.png',
+  'assets/img/avatars/ava-5.png',
+  'assets/img/avatars/ava-6.png',
 ];
 
 const commentElem = `
@@ -25,6 +25,7 @@ const commentElem = `
   <div class="comment__body"></div>
 `;
 
+//creation of new comment
 function createComment() {
   const commentBlock = document.createElement('div');
   commentBlock.classList.add('comment');
@@ -39,11 +40,19 @@ function createComment() {
 //name
 function addName() {
   const name = document.querySelector('.inputs__name-input');
-  const commentNames = document.getElementsByClassName('comment__name');
+  const commentName = document.querySelector('.comment__name');
   if(name.value) {
-    commentNames[0].textContent = name.value;
+    // calculation chain
+    // const correctName1 = name.value.trim().toLowerCase();
+    // const correctName2 = correctName1.split(/ /);
+    // const correctName3 = correctName2.filter(item => item !== '');
+    // const correctName4 = correctName3.map(item => item = item[0].toUpperCase() + item.slice(1)).join(' ');
+
+    const correctName = name.value.trim().toLowerCase().split(/ /).filter(item => item !== '').map(item => item = item[0].toUpperCase() + item.slice(1)).join(' ');
+
+    commentName.textContent = correctName;
   } else {
-    commentNames[0].textContent = 'Username';
+    commentName.textContent = 'Username';
   }
   name.value = '';
 }
@@ -57,8 +66,12 @@ function addAvatar() {
   if (regexp.test(avatar.value)) {
     let img = new Image();
     img.src = avatar.value;
-    img.onload = function(){commentAvatar.src = img.src;};
-    img.onerror = function(){commentAvatar.src = getAvatar();};
+    img.onload = function() {
+      commentAvatar.src = img.src;
+    };
+    img.onerror = function() {
+      commentAvatar.src = getAvatar();
+    };
   } else {
     commentAvatar.src = getAvatar();
   }
@@ -67,12 +80,13 @@ function addAvatar() {
 
 function getAvatar() {
   let n = Math.round(Math.random()*6);
-  let ava;
+  let avatar;
 
-  for (let item of avatarArr) {
-    if (item[0] == n) ava = item[1];
+  for (let i=0; i<avatarArr.length; i++) {
+    if (i == n) avatar = avatarArr[i];
   }
-  return ava;
+
+  return avatar;
 }
 
 //date
@@ -105,11 +119,27 @@ function addCommentDate() {
 function addComment() {
   const commentText = document.querySelector('.inputs__comment-input');
   const comment = document.querySelector('.comment__body');
-  comment.textContent = commentText.value;
+  const textChecked = checkSpam(commentText.value);
+  comment.textContent = textChecked;
   commentText.value = '';
 }
 
+function checkSpam(str) {
+  const regexp = /viagra|xxx/ig;
+  let strChecked;
+  if (regexp.test(str)) strChecked = str.replace(regexp, '***');
+  return strChecked;
+}
 
+//event listener for adding comment
 button.addEventListener('click', function() {
   createComment();
 });
+
+//hide name field
+const radios = document.querySelector('.inputs__radio-name-container');
+radios.addEventListener('click', function(event) {
+  const nameContainer = document.querySelector('.inputs__name-container');
+  if (event.target.id == 'no') nameContainer.style.display = 'none';
+  if (event.target.id == 'yes') nameContainer.style.display = '';
+})
