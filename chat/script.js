@@ -127,7 +127,11 @@ function addComment() {
 function checkSpam(str) {
   const regexp = /viagra|xxx/ig;
   let strChecked;
-  if (regexp.test(str)) strChecked = str.replace(regexp, '***');
+  if (regexp.test(str)) {
+    strChecked = str.replace(regexp, '***');
+  } else {
+    strChecked = str;
+  }
   return strChecked;
 }
 
