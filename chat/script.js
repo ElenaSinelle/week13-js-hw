@@ -42,7 +42,7 @@ function addName() {
   const name = document.querySelector('.inputs__name-input');
   const commentName = document.querySelector('.comment__name');
   if(name.value) {
-    // calculation chain
+    // calculation chain for name formatting
     // const correctName1 = name.value.trim().toLowerCase();
     // const correctName2 = correctName1.split(/ /);
     // const correctName3 = correctName2.filter(item => item !== '');
@@ -66,12 +66,8 @@ function addAvatar() {
   if (regexp.test(avatar.value)) {
     let img = new Image();
     img.src = avatar.value;
-    img.onload = function() {
-      commentAvatar.src = img.src;
-    };
-    img.onerror = function() {
-      commentAvatar.src = getAvatar();
-    };
+    img.onload = function() { commentAvatar.src = img.src; };
+    img.onerror = function() { commentAvatar.src = getAvatar(); };
   } else {
     commentAvatar.src = getAvatar();
   }
@@ -79,13 +75,8 @@ function addAvatar() {
 }
 
 function getAvatar() {
-  let n = Math.round(Math.random()*6);
-  let avatar;
-
-  for (let i=0; i<avatarArr.length; i++) {
-    if (i == n) avatar = avatarArr[i];
-  }
-
+  let n = Math.round(Math.random()*(avatarArr.length - 1));
+  const avatar = avatarArr[n];
   return avatar;
 }
 
@@ -136,14 +127,16 @@ function checkSpam(str) {
 }
 
 //event listener for adding comment
-button.addEventListener('click', function() {
-  createComment();
-});
+button.addEventListener('click', createComment);
 
 //hide name field
 const radios = document.querySelector('.inputs__radio-name-container');
 radios.addEventListener('click', function(event) {
   const nameContainer = document.querySelector('.inputs__name-container');
-  if (event.target.id == 'no') nameContainer.style.display = 'none';
+  const name = document.querySelector('.inputs__name-input');
+  if (event.target.id == 'no') {
+    nameContainer.style.display = 'none';
+    name.value = '';
+  }
   if (event.target.id == 'yes') nameContainer.style.display = '';
 })
