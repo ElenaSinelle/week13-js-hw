@@ -4,11 +4,20 @@ const btn = document.querySelector('.count__button');
 const result = document.querySelector('.count__result');
 
 function checkInput () {
-  input.min = Date.now();
+  let minInput = new Date();
+  let year = minInput.getFullYear();
+  let month = String(minInput.getMonth() +1);
+  month = month.length == 1 ? month.padStart(2, '0') : month;
+  let date = String(minInput.getDate());
+  date = date.length == 1 ? date.padStart(2, '0') : date;
+  let today = `${year}-${month}-${date}`;
 
-  if(!input.value || (Date.parse(input.value) < input.min))  {
+  if(!input.value || (input.value < today))  {
     result.classList.add('wrong');
     result.textContent = 'Please enter your Birthday in the future';
+  } else if(input.value == today) {
+    result.classList.remove('wrong');
+    result.textContent = 'Congratulations! Your Birthday is today!';
   } else {
     result.classList.remove('wrong');
     const daysCounted = countDays();
