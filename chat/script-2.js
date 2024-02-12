@@ -55,12 +55,18 @@ function createName() {
 //avatar
 function createAvatar() {
   const regexp = /^https?:\/\/.+(.png|.jpg|.jpeg|.svg)$/;
-  if (regexp.test(avatarInput.value)) {
-    return avatarInput.value;
-    // let img = new Image();
-    // img.src = avatarInput.value;
-    // img.onload = function() { return img.src; };
-    // img.onerror = function() { return getAvatar(); };
+  const inputSrc = (avatarInput.value).trim();
+
+  if (regexp.test(inputSrc)) {
+    let img = new Image();
+    img.src = inputSrc;
+
+    if (img.width == 0) {
+      return getAvatar();
+    } else {
+      return inputSrc;
+    }
+
   } else {
     return getAvatar();
   }
