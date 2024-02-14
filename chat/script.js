@@ -1,6 +1,11 @@
 'use strict'
+let comments = [];
+
 const button = document.querySelector('.inputs__button');
-const chat = document.querySelector('.display');
+const chatBody = document.querySelector('.display__body');
+const nameInput = document.querySelector('.inputs__name-input');
+const avatarInput = document.querySelector('.inputs__avatar-input');
+const commentInput = document.querySelector('.inputs__comment-input');
 
 const avatarArr = [
   'assets/img/avatars/ava-0.png',
@@ -12,107 +17,88 @@ const avatarArr = [
   'assets/img/avatars/ava-6.png',
 ];
 
-const commentElem = `
-  <div class="comment__header">
-    <div class="comment__avatar-container">
-      <img class="comment__avatar" src="" alt="аватар">
-      <h4 class="comment__name"></h4>
-    </div>
-
-    <div class="comment__date"></div>
-  </div>
-
-  <div class="comment__body"></div>
-`;
-
-//creation of new comment
-function createComment() {
+//creation of new comment layout
+function createComment(commentData) {
   const commentBlock = document.createElement('div');
   commentBlock.classList.add('comment');
-  chat.append(commentBlock);
-  commentBlock.innerHTML = commentElem;
-  addName();
-  addAvatar();
-  addCommentDate();
-  addComment();
+  chatBody.prepend(commentBlock);
+  commentBlock.innerHTML = `
+  <div class="comment__header">
+    <div class="comment__avatar-container">
+      <img class="comment__avatar" src="${commentData.avatar}" alt="аватар">
+      <h4 class="comment__name">${commentData.name}</h4>
+    </div>
+
+    <div class="comment__date">${commentData.date}</div>
+  </div>
+
+  <div class="comment__body">${commentData.comment}</div>
+`;
 }
 
 //name
-function addName() {
-  const name = document.querySelector('.inputs__name-input');
-  const commentName = document.querySelector('.comment__name');
-  if(name.value) {
-    // calculation chain for name formatting
-    // const correctName1 = name.value.trim().toLowerCase();
-    // const correctName2 = correctName1.split(/ /);
-    // const correctName3 = correctName2.filter(item => item !== '');
-    // const correctName4 = correctName3.map(item => item = item[0].toUpperCase() + item.slice(1)).join(' ');
+function createName() {
+  if(nameInput.value) {
+    return nameInput.value.trim()
+      .toLowerCase()
+      .split(/ /)
+      .filter(item => item !== '')
+      .map(item => item = item[0]
+      .toUpperCase() + item.slice(1))
+      .join(' ');
 
-    const correctName = name.value.trim().toLowerCase().split(/ /).filter(item => item !== '').map(item => item = item[0].toUpperCase() + item.slice(1)).join(' ');
-
-    commentName.textContent = correctName;
   } else {
-    commentName.textContent = 'Username';
+   return 'Username';
   }
-  name.value = '';
 }
 
 //avatar
-function addAvatar() {
-  const avatar = document.querySelector('.inputs__avatar-input');
-  const commentAvatar = document.querySelector('.comment__avatar');
-  const regexp = /^https?:\/\/.+(.png|.jpg|.jpeg|.svg)$/;
+function createAvatar() {
+  // const regexp = /^https?:\/\/.+(.png|.jpg|.jpeg|.svg)$/;
+  const regexp = /^https?:.+$/;
+  const inputSrc = (avatarInput.value).trim();
 
-  if (regexp.test(avatar.value)) {
+  if (regexp.test(inputSrc)) {
     let img = new Image();
-    img.src = avatar.value;
-    img.onload = function() { commentAvatar.src = img.src; };
-    img.onerror = function() { commentAvatar.src = getAvatar(); };
+    img.src = inputSrc;
+
+    if (img.width !== 0) {
+      return inputSrc;
+    } else {
+      return getAvatar();
+    }
+
   } else {
-    commentAvatar.src = getAvatar();
+    return getAvatar();
   }
-  avatar.value = '';
 }
 
 function getAvatar() {
   let n = Math.round(Math.random()*(avatarArr.length - 1));
-  const avatar = avatarArr[n];
-  return avatar;
+  return avatarArr[n];
 }
 
 //date
-function addCommentDate() {
+function createCommentDate() {
   const date = new Date();
-  const commentDate = document.querySelector('.comment__date');
-  const day = function() {
-    switch(date.getDay()) {
-      case 0: return 'Воскресенье'; break;
-      case 1: return 'Понедельник'; break;
-      case 2: return 'Вторник'; break;
-      case 3: return 'Среда'; break;
-      case 4: return 'Четверг'; break;
-      case 5: return 'Пятница'; break;
-      case 6: return 'Суббота'; break;
-    }
-  }
 
-  const shortDate = function() {
-    const dayDate = String(date.getDate()).length == 1 ? String(date.getDate()).padStart(2, '0') : String(date.getDate());
-    const month = String(date.getMonth()).length == 1 ? String(date.getMonth() + 1).padStart(2, '0') : date.getMonth();
-    const year = String(date.getFullYear());
-    return `${dayDate}.${month}.${year}`;
-  }
+  const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+  const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
-  commentDate.textContent = `${day()}, ${shortDate()} в ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+  const dayOfWeek = days[date.getDay()];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours =  String(date.getHours()).length === 1 ? String(date.getHours()).padStart(2, '0') : String(date.getHours());
+  const minutes = String(date.getMinutes()).length === 1 ? String(date.getMinutes()).padStart(2, '0') : String(date.getMinutes());
+  const seconds =  String(date.getSeconds()).length === 1 ? String(date.getSeconds()).padStart(2, '0') : String(date.getSeconds());
+
+  return `${dayOfWeek}, ${day} ${month} ${year} в ${hours}:${minutes}:${seconds}`;
 }
 
 //comment
-function addComment() {
-  const commentText = document.querySelector('.inputs__comment-input');
-  const comment = document.querySelector('.comment__body');
-  const textChecked = checkSpam(commentText.value);
-  comment.textContent = textChecked;
-  commentText.value = '';
+function createCommentText() {
+  return checkSpam(commentInput.value);
 }
 
 function checkSpam(str) {
@@ -126,17 +112,38 @@ function checkSpam(str) {
   return strChecked;
 }
 
+// adding of a new comment
+function addCommentToPage() {
+  const name = createName();
+  const avatar = createAvatar();
+  const commentText = createCommentText();
+  const date = createCommentDate();
+
+  const commentData = { name, avatar, comment: commentText, date };
+  comments.push(commentData);
+
+  // draw comment on page
+  createComment(commentData);
+
+  // clear inputs
+  nameInput.value = '';
+  avatarInput.value = '';
+  commentInput.value = '';
+}
+
+
 //event listener for adding comment
-button.addEventListener('click', createComment);
+button.addEventListener('click', addCommentToPage);
+
 
 //hide name field
 const radios = document.querySelector('.inputs__radio-name-container');
 radios.addEventListener('click', function(event) {
   const nameContainer = document.querySelector('.inputs__name-container');
-  const name = document.querySelector('.inputs__name-input');
-  if (event.target.id == 'no') {
+
+  if (event.target.id === 'no') {
     nameContainer.style.display = 'none';
-    name.value = '';
+    nameInput.value = '';
   }
-  if (event.target.id == 'yes') nameContainer.style.display = '';
+  if (event.target.id === 'yes') nameContainer.style.display = '';
 })
